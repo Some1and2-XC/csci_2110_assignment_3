@@ -8,17 +8,30 @@ class Main {
 
         System.out.println("Hello Wrld");
 
+        // Gets an array list of the inputs of the file (line by line)
         ArrayList<String> v = read_file("nhlstats.txt");
 
-        ArrayList<PlayerRecord> player_positions = new ArrayList<PlayerRecord>();
+        // Initializes the head node as well as `player_position`
+        NHLStats<PlayerRecord> head = new NHLStats<PlayerRecord>(parse_player_record(v.get(0)), null);
+        NHLStats<PlayerRecord> player_position = head;
 
-        for (int i = 0; i < v.size(); i++) {
-            player_positions.add(parse_player_record(v.get(i)));
+        // Adds all the values from `v` to the linked list (I would never use a linked list like this)
+        for (int i = 1; i < v.size(); i++) {
+
+            PlayerRecord pr = parse_player_record(v.get(i)); // creates an object for the next value
+            player_position.setNext(new NHLStats<PlayerRecord>(pr, null)); // Sets that object to come after the current object
+            player_position = player_position.getNext(); // changes the current position being analyzed to the previously parse object
+
         }
 
-        for (int i = 0; i < player_positions.size(); i++) {
-            // System.out.println("" + player_positions.get(i));
-            System.out.println("" + player_positions.get(i).goals_scored);
+        player_position = head; // resets the `player_position` to the start node
+
+        // Reads through all the values and displays them
+        while (player_position.getNext() != null) {
+
+            System.out.println(player_position.getData().toString());
+            player_position = player_position.getNext();
+
         }
 
     }
@@ -69,21 +82,22 @@ class Main {
         return player_out;
     }
 
+    /*
+     * Method for parsing a `PlayerPosition` from a string with the value
+    */
     public static PlayerPosition parse_player_position(String input_str) {
 
-        if (input_str == "C") { return PlayerPosition.C; }
-        else if (input_str == "LW") { return PlayerPosition.LW; }
-        else if (input_str == "RW") { return PlayerPosition.RW; }
-        else if (input_str == "LD") { return PlayerPosition.LD; }
-        else if (input_str == "RD") { return PlayerPosition.RD; }
-        else if (input_str == "G") { return PlayerPosition.G; }
-        else {
+        return switch(input_str) {
+            case "C" -> PlayerPosition.C;
+            case "LW" -> PlayerPosition.LW;
+            case "RW" -> PlayerPosition.RW;
+            case "LD" -> PlayerPosition.LD;
+            case "RD" -> PlayerPosition.RD;
+            case "D" -> PlayerPosition.D;
+            case "G" -> PlayerPosition.G;
 
-            System.out.println("Didn't find position?? Defaulting to 'G' from: " + input_str);
-            return PlayerPosition.G;
-
-
-        }
+            default -> throw new IllegalArgumentException("Can't find player position!! from: " + input_str);
+        };
 
     }
 

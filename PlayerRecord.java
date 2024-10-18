@@ -1,14 +1,14 @@
 public class PlayerRecord {
 
-    String name;
-    PlayerPosition position;
-    String team_name;
-    int games_played;
-    int goals_scored;
-    int assists;
-    int penalties_minutes;
-    int shots_on_goal;
-    int game_winning_goals;
+    public String name;
+    public PlayerPosition position;
+    public String team_name;
+    public int games_played;
+    public int goals_scored;
+    public int assists;
+    public int penalties_minutes;
+    public int shots_on_goal;
+    public int game_winning_goals;
 
 
     public PlayerRecord(String name, PlayerPosition position, String team_name, int games_played, int goals_scored, int assists, int penalties_minutes, int shots_on_goal, int game_winning_goals) {
