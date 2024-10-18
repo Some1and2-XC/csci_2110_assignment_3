@@ -1,4 +1,4 @@
-class PlayerRecord {
+public class PlayerRecord {
 
     String name;
     PlayerPosition position;
@@ -23,6 +23,30 @@ class PlayerRecord {
         this.shots_on_goal = shots_on_goal;
         this.game_winning_goals = game_winning_goals;
 
+    }
+
+    public String toString() {
+        return String.format("""
+            name = %s
+            position = %s
+            team_name = %s
+            games_played = %s
+            goals_scored = %s
+            assists = %s
+            penalties_minutes = %s
+            shots_on_goal = %s
+            game_winning_goals = %s
+            """,
+            name,
+            position,
+            team_name,
+            games_played,
+            goals_scored,
+            assists,
+            penalties_minutes,
+            shots_on_goal,
+            game_winning_goals
+                );
     }
 
 }
