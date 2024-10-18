@@ -2,14 +2,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-class Main {
+class NHLListDemo {
     public static void main(String[] args) {
 
-        System.out.println("Hello Wrld");
-
         // Gets an array list of the inputs of the file (line by line)
-        ArrayList<String> v = read_file("nhlstats.txt");
+        String filename;
+        if (true) {
+            filename = "nhlstats.txt";
+        } else {
+            Scanner sc = new Scanner(System.in);
+            filename = sc.next();
+            sc.close();
+        }
+
+        ArrayList<String> v = read_file(filename);
 
         // Initializes the head node as well as `player_position`
         NHLStats<PlayerRecord> head = new NHLStats<PlayerRecord>(parse_player_record(v.get(0)), null);
@@ -26,13 +32,17 @@ class Main {
 
         player_position = head; // resets the `player_position` to the start node
 
-        // Reads through all the values and displays them
-        while (player_position.getNext() != null) {
-
-            System.out.println(player_position.getData().toString());
-            player_position = player_position.getNext();
-
-        }
+        NHLStats.get_most_goals_and_assists(head);
+        System.out.println();
+        NHLStats.get_most_aggressive(head);
+        System.out.println();
+        NHLStats.get_most_game_winning_goals(head);
+        System.out.println();
+        NHLStats.get_most_promising_players(head);
+        System.out.println();
+        NHLStats. get_team_with_most_penalty_minutes(head);
+        System.out.println();
+        NHLStats.get_team_with_most_game_winning_goals(head);
 
     }
 
@@ -45,17 +55,20 @@ class Main {
 
         File my_file = new File(filename);
         Scanner sc;
-        try {
-            sc = new Scanner(my_file);
+        // Tries to initialize scanner
+        try { sc = new Scanner(my_file); }
+        catch (Exception e) {
+            System.out.println("Can't find file! Filename: " + my_file);
+            // not a resource leak, this only runs if sc isn't initialized
+            // sc.close(); // try uncommenting this if you don't believe me
+            return out_str;
+        }
 
-            while (sc.hasNextLine()) {
-                out_str.add(sc.nextLine());
-            }
-
-            sc.close();
-
-        } catch (Exception e) { }
-
+        // Reads all the lines
+        while (sc.hasNextLine()) {
+            out_str.add(sc.nextLine());
+        }
+        sc.close();
         return out_str;
 
     }
@@ -67,7 +80,7 @@ class Main {
         // System.out.println(sc.next());
         PlayerRecord player_out = new PlayerRecord(
             sc.next(),
-            parse_player_position(sc.next()),
+            PlayerPosition.fromString(sc.next()),
             sc.next(),
             sc.nextInt(),
             sc.nextInt(),
@@ -80,25 +93,6 @@ class Main {
         sc.close();
 
         return player_out;
-    }
-
-    /*
-     * Method for parsing a `PlayerPosition` from a string with the value
-    */
-    public static PlayerPosition parse_player_position(String input_str) {
-
-        return switch(input_str) {
-            case "C" -> PlayerPosition.C;
-            case "LW" -> PlayerPosition.LW;
-            case "RW" -> PlayerPosition.RW;
-            case "LD" -> PlayerPosition.LD;
-            case "RD" -> PlayerPosition.RD;
-            case "D" -> PlayerPosition.D;
-            case "G" -> PlayerPosition.G;
-
-            default -> throw new IllegalArgumentException("Can't find player position!! from: " + input_str);
-        };
-
     }
 
 }

@@ -26,6 +26,8 @@ public class PlayerRecord {
     }
 
     public String toString() {
+        return String.format("\tName: %s\ton team: %s", this.name, this.team_name);
+        /*
         return String.format("""
             name = %s
             position = %s
@@ -47,6 +49,10 @@ public class PlayerRecord {
             shots_on_goal,
             game_winning_goals
                 );
+        */
     }
 
+    public String toStringWithPosition() {
+        return String.format("\tName: %s\ton team: %s\ton position: %s", this.name, this.team_name, this.position);
+    }
 }
